@@ -1,12 +1,31 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LoggerMiddleware } from './common/logger.middleware';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './http-exception.filter';
-
+import { LoggingModule } from './logging/logging.module';
+import * as winston from 'winston';
+import {
+  utilities as nestWinstonMooduleUtilities,
+  WinstonModule,
+} from 'nest-winston';
 @Module({
-  imports: [],
+  imports: [
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            nestWinstonMooduleUtilities.format.nestLike('wandookong', {
+              prettyPrint: true,
+            }),
+          ),
+        }),
+      ],
+    }),
+    LoggingModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
@@ -16,8 +35,4 @@ import { HttpExceptionFilter } from './http-exception.filter';
     },
   ],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer): any {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

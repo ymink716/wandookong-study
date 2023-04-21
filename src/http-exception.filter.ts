@@ -3,7 +3,6 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  HttpStatus,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -25,6 +24,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       timestamp: new Date(),
       url: req.url,
       response: response,
+      message: 'exception filter에서 보낸 로그입니다.',
     };
 
     console.log(log);
