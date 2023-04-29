@@ -9,6 +9,7 @@ import {
   utilities as nestWinstonMooduleUtilities,
   WinstonModule,
 } from 'nest-winston';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     WinstonModule.forRoot({
@@ -25,6 +26,7 @@ import {
       ],
     }),
     LoggingModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
