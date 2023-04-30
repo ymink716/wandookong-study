@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   async signIn(email: string, password: string): Promise<any> {
     // TODO: user service에서 해당 유저 찾기, 암호화된 비밀번호 검증 로직 추가

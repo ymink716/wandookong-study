@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './http-exception.filter';
 import { LoggingModule } from './logging/logging.module';
 import * as winston from 'winston';
@@ -10,9 +10,19 @@ import {
   WinstonModule,
 } from 'nest-winston';
 import { AuthModule } from './auth/auth.module';
-import { AuthGuard } from './auth/auth.guard';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      expandVariables: true,
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? './env/.production.env'
+          : process.env.NODE_ENV === 'stage'
+          ? './env/.stage.env'
+          : './env/.development.env',
+    }),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -32,10 +42,6 @@ import { AuthGuard } from './auth/auth.guard';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
