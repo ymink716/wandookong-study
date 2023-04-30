@@ -1,5 +1,5 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
@@ -8,7 +8,7 @@ import { AuthGuard } from './auth.guard';
 @Module({
   imports: [
     ConfigModule,
-    // TODO : 정리 https://stackoverflow.com/questions/54308318/how-to-get-the-configurations-from-within-a-module-import-in-nestjs
+    // https://stackoverflow.com/questions/54308318/how-to-get-the-configurations-from-within-a-module-import-in-nestjs
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

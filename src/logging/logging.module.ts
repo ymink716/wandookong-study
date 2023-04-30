@@ -1,6 +1,6 @@
 import { Module, Logger } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from 'src/logging.interceptor';
+import { LoggingInterceptor } from 'src/common/logging.interceptor';
 
 @Module({
   providers: [

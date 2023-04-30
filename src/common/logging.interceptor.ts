@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -16,16 +16,17 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url, body } = context.getArgByIndex(0);
     this.logger.log(`Request: ${method} ${url}`);
 
-    return next.handle().pipe(
-      tap({
-        next: (data: unknown) => {
+    const response = context.switchToHttp().getResponse();
+    return next
+      .handle()
+      .pipe(
+        tap((data) =>
           this.logger.log(
-            `Response from ${method} ${url} \n response: ${JSON.stringify(
-              data,
-            )}`,
-          );
-        },
-      }),
-    );
+            `Response from ${method} ${url} \n statusCode: ${
+              response.statusCode
+            } response: ${JSON.stringify(data)}`,
+          ),
+        ),
+      );
   }
 }
