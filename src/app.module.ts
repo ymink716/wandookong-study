@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from './common/http-exception.filter';
-import { LoggingModule } from './logging/logging.module';
+import { AllExceptionFilter } from './common/all-exception.filter';
+import { LoggerModule } from './logging/logger.module';
 import * as winston from 'winston';
 import {
   utilities as nestWinstonMooduleUtilities,
@@ -36,7 +36,7 @@ import { ConfigModule } from '@nestjs/config';
         }),
       ],
     }),
-    LoggingModule,
+    LoggerModule,
     AuthModule,
   ],
   controllers: [AppController],
@@ -44,7 +44,7 @@ import { ConfigModule } from '@nestjs/config';
     AppService,
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+      useClass: AllExceptionFilter,
     },
   ],
 })

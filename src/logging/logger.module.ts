@@ -7,5 +7,6 @@ import { LoggingInterceptor } from 'src/common/logging.interceptor';
     Logger,
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
   ],
+  exports: [Logger],
 })
-export class LoggingModule {}
+export class LoggerModule {}

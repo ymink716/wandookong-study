@@ -1,6 +1,6 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/http-exception.filter';
+import { AllExceptionFilter } from './common/all-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import {
   WinstonModule,
@@ -25,8 +25,11 @@ async function bootstrap() {
     }),
   });
 
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  const httpAdapter = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionFilter(httpAdapter));
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   await app.listen(3000);
 }
 bootstrap();
