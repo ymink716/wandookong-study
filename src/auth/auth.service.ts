@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
+  // TODO: 리턴 타입 지정
   async signIn(email: string, password: string): Promise<any> {
     // TODO: user service에서 해당 유저 찾기, 암호화된 비밀번호 검증 로직 추가
 
