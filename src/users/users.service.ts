@@ -11,11 +11,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async createUser(
-    email: string,
-    nickname: string,
-    password: string,
-  ): Promise<void> {
+  async createUser(email: string, nickname: string, password: string): Promise<void> {
     const existedUser = await this.findUser(email);
 
     if (existedUser) {
