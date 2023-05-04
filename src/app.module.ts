@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/all-exception.filter';
 import { LoggerModule } from './logging/logger.module';
@@ -10,7 +8,9 @@ import {
   WinstonModule,
 } from 'nest-winston';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,12 +36,25 @@ import { ConfigModule } from '@nestjs/config';
         }),
       ],
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('DATABASE_HOST'),
+        port: +configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USERNAME'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: 'wandookong',
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: configService.get('DATABASE_SYNCHRONIZE') === 'true',
+      }),
+    }),
     LoggerModule,
     AuthModule,
+    UsersModule,
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_FILTER,
       useClass: AllExceptionFilter,
