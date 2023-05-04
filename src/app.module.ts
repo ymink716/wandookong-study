@@ -3,10 +3,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './common/all-exception.filter';
 import { LoggerModule } from './logging/logger.module';
 import * as winston from 'winston';
-import {
-  utilities as nestWinstonMooduleUtilities,
-  WinstonModule,
-} from 'nest-winston';
+import { utilities as nestWinstonMooduleUtilities, WinstonModule } from 'nest-winston';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';

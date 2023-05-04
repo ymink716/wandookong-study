@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, NotFoundException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -29,8 +29,25 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
+  async verifyAndGetUser(email: string, password: string): Promise<User> {
+    const user: User = await this.findUserByEmail(email);
+    const hash = user.password;
+
+    const isMatch = await bcrypt.compare(password, hash);
+
+    if (!isMatch) {
+      throw new UnauthorizedException('사용자 정보가 일치하지 않습니다.');
+    }
+
+    return user;
+  }
+
   async findUserByEmail(email: string): Promise<User> {
     const user: User = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException('존재하지 않는 사용자입니다.');
+    }
 
     return user;
   }
@@ -44,6 +61,10 @@ export class UsersService {
 
   async getUserInfo(userId: number) {
     const user: User = await this.usersRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new NotFoundException('존재하지 않는 사용자입니다.');
+    }
 
     return user;
   }
