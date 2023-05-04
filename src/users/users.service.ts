@@ -12,7 +12,7 @@ export class UsersService {
   ) {}
 
   async createUser(email: string, nickname: string, password: string): Promise<void> {
-    const existedUser = await this.findUser(email);
+    const existedUser = await this.findUserByEmail(email);
 
     if (existedUser) {
       throw new ConflictException('이미 사용 중인 이메일입니다.');
@@ -29,8 +29,8 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  async findUser(email: string): Promise<User> {
-    const user: User = await this.usersRepository.findOneBy({ email });
+  async findUserByEmail(email: string): Promise<User> {
+    const user: User = await this.usersRepository.findOne({ where: { email } });
 
     return user;
   }
@@ -40,5 +40,11 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     return hashedPassword;
+  }
+
+  async getUserInfo(userId: number) {
+    const user: User = await this.usersRepository.findOne({ where: { id: userId } });
+
+    return user;
   }
 }
