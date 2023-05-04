@@ -6,7 +6,6 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule,
-    // https://stackoverflow.com/questions/54308318/how-to-get-the-configurations-from-within-a-module-import-in-nestjs
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

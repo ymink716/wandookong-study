@@ -21,11 +21,4 @@ export class AuthController {
   signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
-
-  @UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.OK)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
 }
