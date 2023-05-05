@@ -2,10 +2,7 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionFilter } from './common/all-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
-import {
-  WinstonModule,
-  utilities as nestWinstonMooduleUtilities,
-} from 'nest-winston';
+import { WinstonModule, utilities as nestWinstonMooduleUtilities } from 'nest-winston';
 import * as winston from 'winston';
 
 async function bootstrap() {

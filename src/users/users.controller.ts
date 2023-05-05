@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get, Request, UseGuards } from '@nestjs/common'
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { ResponseUserDto } from './dto/response-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -17,7 +18,6 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get('/profile')
   getUserInfo(@Request() req) {
-    // TODO: return값 entity에서 변경
     return req.user;
   }
 }
