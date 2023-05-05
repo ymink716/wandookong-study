@@ -28,7 +28,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
 
-    this.logger.error(responseBody);
+    this.logger.error(exception);
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }
